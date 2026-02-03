@@ -23,7 +23,7 @@ jobs:
         run: |
           # 给予 rules 文件执行权限
           chmod +x debian/rules
-          # 开始构建（-us -uc 表示不进行签名）
+          # 开始构建（-us -uc 表示不进行名）
           dpkg-buildpackage -us -uc -b
 
       - name: Upload Artifact
