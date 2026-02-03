@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key><string>PSGroupCell</string>
+			<key>label</key><string>主开关</string>
+		</dict>
+		<dict>
+			<key>cell</key><string>PSSwitchCell</string>
+			<key>default</key><true/>
+			<key>defaults</key><string>com.tom.wifitrigger</string>
+			<key>key</key><string>enabled</string>
+			<key>label</key><string>开启插件</string>
+		</dict>
+		<dict>
+			<key>cell</key><string>PSGroupCell</string>
+			<key>label</key><string>触发配置 (WiFi名称需完全一致)</string>
+		</dict>
+		<dict>
+			<key>cell</key><string>PSEditTextCell</string>
+			<key>defaults</key><string>com.tom.wifitrigger</string>
+			<key>key</key><string>targetWifi</string>
+			<key>label</key><string>WiFi名称:</string>
+			<key>placeholder</key><string>例如: Home_WiFi</string>
+		</dict>
+		<dict>
+			<key>cell</key><string>PSEditTextCell</string>
+			<key>defaults</key><string>com.tom.wifitrigger</string>
+			<key>key</key><string>targetShortcut</string>
+			<key>label</key><string>执行快捷指令:</string>
+			<key>placeholder</key><string>例如: 开启空调</string>
+		</dict>
+	</array>
+	<key>title</key><string>WiFi指令触发器</string>
+</dict>
+</plist>

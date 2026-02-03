@@ -1,0 +1,9 @@
+Package: com.tom.wifitrigger
+Name: WiFi指令触发器
+Depends: mobilesubstrate, preferenceloader
+Version: 0.1.0
+Architecture: iphoneos-arm64
+Description: 连接特定WiFi时自动运行快捷指令 (支持多巴胺无根越狱)
+Maintainer: Administrator
+Author: Administrator
+Section: Tweaks
