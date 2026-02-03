@@ -1,0 +1,50 @@
+name: Build DEB Plugin
+
+on:
+  push:
+    branches: [ "master" ] # 或者是 main，取决于你的分支名
+  workflow_dispatch:      # 允许手动点击运行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Prepare Build Directory
+        run: |
+          # 1. 创建打包临时目录结构 (假设安装到 /usr/local/bin)
+          mkdir -p build/usr/local/bin
+          mkdir -p build/DEBIAN
+          
+          # 2. 解压你的插件文件到目标目录
+          unzip WifiTrigger.zip -d build/usr/local/bin/
+          
+          # 3. 给予执行权限 (假设解压后里面有可执行文件)
+          chmod -R 755 build/usr/local/bin/
+
+      - name: Create Control File
+        run: |
+          # 动态生成 debian 的控制文件
+          cat <<EOF > build/DEBIAN/control
+          Package: wifitrigger-plugin
+          Version: 1.0.0
+          Section: utils
+          Priority: optional
+          Architecture: amd64
+          Maintainer: senyugege <senyugege@gmail.com>
+          Description: WifiTrigger plugin for Linux.
+          EOF
+
+      - name: Build .deb Package
+        run: |
+          # 使用 dpkg-deb 打包
+          dpkg-deb --build build wifitrigger.deb
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wifitrigger-package
+          path: wifitrigger.deb
