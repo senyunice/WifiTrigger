@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -42,3 +44,14 @@ jobs:
       with:
         name: WifiTrigger-DEB
         path: packages/
+        
+    - name: Upload Release Assets
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./packages/
+        asset_name: WifiTrigger.deb
+        asset_content_type: application/vnd.debian.binary-package
