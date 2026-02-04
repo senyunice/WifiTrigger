@@ -1,0 +1,51 @@
+name: Build WifiTrigger
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v4  # 推荐：更新到 v4
+        
+    - name: Install Theos
+      run: |
+        git clone --recursive https://github.com/theos/theos.git $HOME/theos
+        echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+        echo "$HOME/theos/bin" >> $GITHUB_PATH
+        
+    - name: Install iOS SDK
+      run: |
+        # 注意：这里直接使用环境变量 $THEOS
+        cd $THEOS/sdks
+        curl -LO https://github.com/ios-cross/iphonesdk-fake/releases/download/v17.0.0/iPhoneOS15.6.sdk.tar.xz
+        tar -xf iPhoneOS15.6.sdk.tar.xz
+        
+    - name: Install ldid
+      run: |
+        brew install ldid
+        
+    - name: Build Package
+      run: |
+        make clean package FINALPACKAGE=1
+      # 优化：移除了 redundant 的 env 块，因为 $THEOS 已经在 Install Theos 步骤中设为全局变量了
+      # 且在 YAML 的 env: 字段中直接写 $HOME 可能会导致路径无法解析的问题
+        
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4  # 关键修复：升级到 v4
+      with:
+        name: WifiTrigger-DEB
+        path: packages/
+        
+    - name: Upload Release Assets
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v2  # 推荐：更新到 v2
+      with:
+        files: packages/*.deb
